@@ -2,7 +2,7 @@ import math
 class proyectile():
 
 
-    def calculate_trajectory(angle_deg, initial_velocity, initial_x, initial_y, time_step, gravity, wind_acceleration):
+    def calculate_trajectory(angle_deg, initial_velocity, initial_x, initial_y, time_step, gravity, wind_acceleration, obstacle):
         # Convert angle from degrees to radians
         angle_rad = math.radians(angle_deg)
         
@@ -30,6 +30,9 @@ class proyectile():
             # Break the loop when y position is 0 or below
             if new_y <= 0:
                 print("Projectile has reached the ground.")
+                break
+            if proyectile.detect_colision(projectile_path,obstacle):
+                print("Projectile has reached the obstacle.")
                 break
 
             # Update time
