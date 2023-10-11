@@ -111,10 +111,13 @@ while selecting_difficulties:
 
     draw_buttons()
 # Input values
+wind_params = {'None':[0,0], 'Easy':[0.25, 2.5], 'Medium':[2.5, 7.5], 'Hard':[7.5, 12.5]}
+obstacle_params = {'None':[0,0], 'Easy':[25, 50], 'Medium':[50, 75], 'Hard':[75, 100]}
 
 time_step = 0.0166  # Time step for simulation
 gravity = 9.81  # Acceleration due to gravity (m/s^2)
-wind_acceleration = float(input("Enter the horizontal wind acceleration (m/s^2): "))
+wind_acceleration = random.uniform(wind_params[a_difficulty][0], wind_params[a_difficulty][1])*random.choice([-1, 1])
+
 p1=Obstacle(50,0,50,50,(255, 255, 0))
 p2=Obstacle(500,0,50,50,(255, 0, 255))
 turn=0
@@ -126,7 +129,9 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running=False
-    obs=Obstacle(random.randint(100,500),random.randint(0,50),random.randint(25,100),random.randint(25,100),(255, 0, 0))
+    obs=Obstacle(random.randint(100,500),random.randint(0,50),
+                 random.randint(obstacle_params[b_difficulty][0],obstacle_params[b_difficulty][1]),
+                 random.randint(obstacle_params[b_difficulty][0],obstacle_params[b_difficulty][1]),(255, 0, 0))
     if currentPlayer==1:
         state=0
         render_all(obs,p1,p2)
