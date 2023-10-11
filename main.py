@@ -153,7 +153,7 @@ while selecting_difficulties:
     draw_buttons()
 # Input values
 wind_params = {'None':[0,0], 'Easy':[0.25, 2.5], 'Medium':[2.5, 7.5], 'Hard':[7.5, 12.5]}
-obstacle_params = {'None':[0,0], 'Easy':[25, 50], 'Medium':[50, 75], 'Hard':[75, 100]}
+obstacle_params = {'None':[0,0], 'Easy':[50, 100], 'Medium':[100, 150], 'Hard':[150, 200]}
 
 time_step = 0.0166  # Time step for simulation
 gravity = 9.81  # Acceleration due to gravity (m/s^2)
@@ -161,6 +161,9 @@ wind_acceleration = random.uniform(wind_params[a_difficulty][0], wind_params[a_d
 
 p1=Obstacle(50,0,50,50,(255, 255, 0))
 p2=Obstacle(500,0,50,50,(255, 0, 255))
+obs=Obstacle(random.randint(250,350),random.randint(0,50),
+                 random.randint(obstacle_params[b_difficulty][0],obstacle_params[b_difficulty][1]),
+                 random.randint(obstacle_params[b_difficulty][0],obstacle_params[b_difficulty][1]),(255, 0, 0))
 turn=0
 currentPlayer=1
 running = True
@@ -170,9 +173,6 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running=False
-    obs=Obstacle(random.randint(100,500),random.randint(0,50),
-                 random.randint(obstacle_params[b_difficulty][0],obstacle_params[b_difficulty][1]),
-                 random.randint(obstacle_params[b_difficulty][0],obstacle_params[b_difficulty][1]),(255, 0, 0))
     if currentPlayer==1:
         state=0
         get_inputs = True
@@ -204,7 +204,7 @@ while running:
             if input_count == 2:
                 get_inputs = False
         render_all(obs,p1,p2)
-        [projectile_path,state]=Proyectile.calculate_trajectory(angle_deg+90, initial_velocity, p2.x, 0.01, time_step, gravity, wind_acceleration, obs,p1)              
+        [projectile_path,state]=Proyectile.calculate_trajectory(-angle_deg+180, initial_velocity, p2.x, 0.01, time_step, gravity, wind_acceleration, obs,p1)              
         render_launch(projectile_path, obs,p1,p2)
         if state==0:
             print("Projectile has reached the ground.")
