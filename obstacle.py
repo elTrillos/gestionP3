@@ -1,7 +1,7 @@
 import pygame
 from screen import HEIGHT, FLOOR_HEIGHT, FLOOR_START
 
-class obstacle():
+class Obstacle():
     def __init__(self, x, y,height,width):
         self.x = x
         self.y = y

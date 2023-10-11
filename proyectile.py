@@ -1,8 +1,8 @@
 import math
-class proyectile():
+class Proyectile():
 
 
-    def calculate_trajectory(angle_deg, initial_velocity, initial_x, initial_y, time_step, gravity, wind_acceleration, obstacle):
+    def calculate_trajectory(angle_deg, initial_velocity, initial_x, initial_y, time_step, gravity, wind_acceleration, obstacle, oponent):
         # Convert angle from degrees to radians
         angle_rad = math.radians(angle_deg)
         
@@ -13,7 +13,7 @@ class proyectile():
         # Initialize time
         time = 0
         projectile_path = []
-
+        state=0
         while initial_y >= 0:
             # Calculate new position
             new_x = initial_x + velocity_x * time + 0.5 * wind_acceleration * time**2
@@ -30,18 +30,30 @@ class proyectile():
             # Break the loop when y position is 0 or below
             if new_y <= 0:
                 print("Projectile has reached the ground.")
+                state=0
                 break
-            if proyectile.detect_colision(projectile_path,obstacle):
+            if Proyectile.detect_colision(projectile_path,obstacle):
                 print("Projectile has reached the obstacle.")
+                state=1
+                break
+            if Proyectile.detect_colision_oponent(projectile_path,oponent):
+                print("Projectile has reached the oponent.")
+                state=2
                 break
 
             # Update time
             time += time_step
         
-        return projectile_path
+        return [projectile_path,state]
     
     def detect_colision(projectile_path,obstacle):
         for [x,y] in projectile_path:
             if obstacle.x<x<obstacle.x+obstacle.width and obstacle.y<y<obstacle.y+obstacle.height:
+                return True
+        return False
+    
+    def detect_colision_oponent(projectile_path,oponent):
+        for [x,y] in projectile_path:
+            if oponent.x<x<oponent.x+oponent.width and oponent.y<y<oponent.y+oponent.height:
                 return True
         return False
