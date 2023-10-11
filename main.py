@@ -81,10 +81,51 @@ def draw_buttons():
 
 
 
-def inputHandler():
-    angle_deg = float(input("Enter the launch angle (degrees): "))
-    initial_velocity = float(input("Enter the initial velocity (m/s): "))
-    return [angle_deg,initial_velocity]
+def input_text(input_count, input_text):
+    render_all(obs,p1,p2)
+    base_font = pygame.font.Font(None, 32)
+    user_text = ''
+    input_rect = pygame.Rect(50, 150, 140, 32) 
+
+    color = pygame.Color('lightskyblue3') 
+    active = False
+    text = font.render(input_text, True, WHITE)
+    win.blit(text, (50, 50))
+    while True: 
+        for event in pygame.event.get(): 
+            if event.type == pygame.MOUSEBUTTONDOWN: 
+                if input_rect.collidepoint(event.pos): 
+                    active = True
+                else: 
+                    active = False
+    
+            if event.type == pygame.KEYDOWN: 
+                if event.key == pygame.K_BACKSPACE: 
+                    user_text = user_text[:-1] 
+
+                elif event.key == 13:
+                    input_count += 1
+                    if user_text.isnumeric():
+                        if float(user_text) < 0:
+                            text = font.render(f"Enter a positive value", True, (255,0,0))
+                            win.blit(text, (50, 100))
+                        else:
+                            return input_count, float(user_text)
+                    else:
+                        text = font.render(f"Enter a numeric value", True, (255,0,0))
+                        win.blit(text, (50, 100))
+                else: 
+                    user_text += event.unicode
+
+        pygame.draw.rect(win, color, input_rect) 
+  
+        text_surface = base_font.render(user_text, True, (255, 255, 255)) 
+        win.blit(text_surface, (input_rect.x+5, input_rect.y+5)) 
+      
+        # set width of textfield so that text cannot get 
+        # outside of user's text input 
+        input_rect.w = max(100, text_surface.get_width()+10)
+        pygame.display.flip()
 
 win = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
@@ -134,8 +175,14 @@ while running:
                  random.randint(obstacle_params[b_difficulty][0],obstacle_params[b_difficulty][1]),(255, 0, 0))
     if currentPlayer==1:
         state=0
+        get_inputs = True
+        input_count = 0
+        while get_inputs:
+            input_count, angle_deg = input_text(input_count, "P1 -> Enter the launch angle (degrees): ")
+            input_count, initial_velocity = input_text(input_count, "P1 -> Enter the initial velocity (m/s):")
+            if input_count == 2:
+                get_inputs = False
         render_all(obs,p1,p2)
-        angle_deg,initial_velocity=inputHandler()
         [projectile_path,state]=Proyectile.calculate_trajectory(angle_deg, initial_velocity, p1.x, 0.01, time_step, gravity, wind_acceleration, obs,p2)              
         render_launch(projectile_path, obs,p1,p2)
         if state==0:
@@ -149,8 +196,14 @@ while running:
         currentPlayer=2
     elif currentPlayer==2:
         state=0
+        get_inputs = True
+        input_count = 0
+        while get_inputs:
+            input_count, angle_deg = input_text(input_count, "P2 -> Enter the launch angle (degrees): ")
+            input_count, initial_velocity = input_text(input_count, "P2 -> Enter the initial velocity (m/s):")
+            if input_count == 2:
+                get_inputs = False
         render_all(obs,p1,p2)
-        angle_deg,initial_velocity=inputHandler()
         [projectile_path,state]=Proyectile.calculate_trajectory(angle_deg+90, initial_velocity, p2.x, 0.01, time_step, gravity, wind_acceleration, obs,p1)              
         render_launch(projectile_path, obs,p1,p2)
         if state==0:
