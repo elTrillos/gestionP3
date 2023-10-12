@@ -32,10 +32,22 @@ class Proyectile():
                 print("Projectile has reached the ground.")
                 state=0
                 break
+
+            if new_x > 1000 * 2:
+                print("Projectile its to outside from screen.")
+                state=0
+                break
+
+            if new_y > 600 * 2:
+                print("Projectile its to outside from screen.")
+                state=0
+                break
+
             if Proyectile.detect_colision(projectile_path,obstacle):
                 print("Projectile has reached the obstacle.")
                 state=1
                 break
+
             if Proyectile.detect_colision_oponent(projectile_path,oponent):
                 print("Projectile has reached the oponent.")
                 state=2
